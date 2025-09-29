@@ -14,8 +14,12 @@ def extract_text_from_htm(file_name):
     soup = BeautifulSoup(content, "html.parser")
     
     # Extracting all text and joining without any separator
-    text_data = soup.get_text().splitlines()
-    combined_text = ''.join([line.strip() for line in text_data if line.strip()])
+    # Use a space separator so tags like <br> and <p> don't run words together
+    text_data = soup.get_text(separator=" ").splitlines()
+    # Join lines with spaces and remove surrounding whitespace
+    combined_text = " ".join(
+        line.strip() for line in text_data if line.strip()
+    )
     # Remove commas and tabs to ensure they don't create new columns or issues
     sanitized_text = combined_text.replace(',', '').replace('\t', ' ')
     return sanitized_text
